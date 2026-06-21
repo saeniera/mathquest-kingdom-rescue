@@ -376,33 +376,62 @@ input,select{
 </section>
 
   <!-- PAGE 2 RULES -->
-  <section id="rules" class="screen">
-    <h1 class="title">📜 RULES OF GAME</h1>
+  <!-- PAGE 2 RULES -->
+<section id="rules" class="screen">
+  <h1 class="title">📜 RULES OF GAME</h1>
 
-    <div class="panel">
-      <h2>🎲 Gameplay Rules</h2>
-      <p>1. Roll the dice and move on the physical board.</p>
-      <p>2. Teacher selects the tile type based on where the player lands.</p>
-      <p>3. Players answer the mathematics challenge.</p>
-      <p>4. Correct answer gives points and rewards.</p>
-      <p>5. Crystal Space gives crystal currency.</p>
-      <p>6. Math Crystals are unlocked through mathematics performance.</p>
-    </div>
+  <div class="panel">
+    <h2>🎲 Gameplay Rules</h2>
+    <p>1. Roll the dice and move on the physical board.</p>
+    <p>2. Teacher selects the zone and tile type based on where the player lands.</p>
+    <p>3. Players answer the mathematics challenge.</p>
+    <p>4. Correct answers give points and rewards.</p>
+    <p>5. Defeat each Boss to earn a Math Crystal.</p>
+    <p>6. Use Math Crystals to buy Power-Up Cards.</p>
+    <p>7. The player with the highest score becomes the Kingdom Champion.</p>
+  </div>
 
-    <div class="panel">
-  <h2>🎴 Power-Up Cards</h2>
+  <div class="panel">
+    <h2>🎯 Tile Types & Scoring System</h2>
 
-  <p>💡 Hint Card = 🔵 Blue Crystal</p>
-  <p>⭐ Double Points = 🟢 Green Crystal</p>
-  <p>🛡 Skip Trap = 🟠 Orange Crystal</p>
-  <p>👢 Extra Move = 🟣 Purple Crystal</p>
-</div>
+    <p><b>🌳 Normal Tile</b></p>
+    <p>Correct answer rewards +10 points.</p>
 
-    <div class="center">
-      <button class="btn blue" onclick="show('tileMenu')">LET'S PLAY ➜</button>
-    </div>
-    
-  </section>
+    <p><b>🎁 Bonus Tile</b></p>
+    <p>Correct answer rewards +20 points.</p>
+
+    <p><b>💣 Trap Tile</b></p>
+    <p>Correct answer rewards +5 points. Wrong answer gives −10 points.</p>
+
+    <p><b>🤝 Teamwork Tile</b></p>
+    <p>Correct answer rewards +15 points to all players.</p>
+
+    <p><b>🐉 Boss Tile</b></p>
+    <p>Boss 1, 2 and 3 reward +30 points. Final Boss rewards +50 points and unlocks a Math Crystal.</p>
+  </div>
+
+  <div class="panel">
+    <h2>💎 Math Crystal Rewards</h2>
+    <p>🔵 Boss 1 defeated = Blue Crystal</p>
+    <p>🟢 Boss 2 defeated = Green Crystal</p>
+    <p>🟠 Boss 3 defeated = Orange Crystal</p>
+    <p>🟣 Final Boss defeated = Purple Crystal</p>
+  </div>
+
+  <div class="panel">
+    <h2>🎴 Power-Up Cards</h2>
+    <p>💡 Hint Card = 🔵 Blue Crystal</p>
+    <p>⭐ Double Points = 🟢 Green Crystal</p>
+    <p>🛡 Skip Trap = 🟠 Orange Crystal</p>
+    <p>👢 Extra Move = 🟣 Purple Crystal</p>
+  </div>
+
+  <div class="center">
+    <button class="btn blue" onclick="show('tileMenu')">
+      LET'S PLAY ➜
+    </button>
+  </div>
+</section>
 
   <!-- PAGE 3 TILE MENU -->
   <section id="tileMenu" class="screen">
@@ -513,7 +542,7 @@ input,select{
 
   <!-- PAGE 5 FEEDBACK -->
   <section id="feedback" class="screen">
-    <h1 class="title">⭐ CORRECT ANSWER!</h1>
+    <h1 class="title">⭐ RESULT</h1>
 
     <div class="panel center">
       <div style="font-size:80px">🏆</div>
@@ -1155,24 +1184,36 @@ function checkAnswer(selected, tile, explain){
 }
 
   } else {
-   if(tile === "Trap"){
 
-  if(skipTrapActive){
-    skipTrapActive = false;
+    if(tile === "Trap"){
 
-    document.getElementById("feedbackText").innerText =
-      "🛡 Skip Trap Used! No penalty.";
-  } else {
-    players[currentPlayerIndex].points -= 10;
+      if(skipTrapActive){
+        skipTrapActive = false;
 
-    if(players[currentPlayerIndex].points < 0){
-      players[currentPlayerIndex].points = 0;
+        document.getElementById("feedbackText").innerText =
+          "🛡 Skip Trap Used! No penalty.";
+      } else {
+        players[currentPlayerIndex].points -= 10;
+
+        if(players[currentPlayerIndex].points < 0){
+          players[currentPlayerIndex].points = 0;
+        }
+
+        document.getElementById("feedbackText").innerText =
+          "💣 Trap Failed! -10 Points";
+      }
+
+    } else if(tile === "Teamwork"){
+
+      document.getElementById("feedbackText").innerText =
+        "🤝 Teamwork Failed! No points awarded.";
+
+    } else {
+
+      document.getElementById("feedbackText").innerText =
+        "❌ Incorrect Answer! No points awarded.";
+
     }
-
-    document.getElementById("feedbackText").innerText =
-      "💣 Trap Failed! -10 Points";
-  }
-}
   }
 
   document.getElementById("explainText").innerText = explain;
