@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MathQuest Kingdom Rescue</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Comic Sans MS","Segoe UI",sans-serif}
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(
+      rgba(0,0,0,0.25),
+      rgba(0,0,0,0.35)
+    ),
+    url("background.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.welcome-container{
+  max-width:700px;
+  margin:auto;
+  text-align:center;
+}
+
+.castle-icon{
+  font-size:90px;
+  margin-bottom:15px;
+}
+
+.game-title{
+  font-size:50px;
+  color:white;
+  text-shadow:4px 4px #7a3900;
+  margin-bottom:10px;
+}
+
+.game-subtitle{
+  font-size:18px;
+  color:white;
+  margin-bottom:20px;
+}
+
+.story-box{
+  background:#fff7d6;
+  border:5px solid #8b4513;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:20px;
+  color:#333;
+}
+
+.benefit-box{
+  background:white;
+  border:5px solid #f59e0b;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:20px;
+  color:#333;
+}
+
+.benefit-box ul{
+  list-style:none;
+  padding:0;
+}
+
+.benefit-box li{
+  padding:8px;
+  font-size:16px;
+}
+.app{
+  width:100%;
+  max-width:1000px;
+
+  background:rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+
+  border:8px solid #5b2c06;
+  border-radius:28px;
+
+  padding:22px;
+}
+.cloud{position:absolute;background:white;border-radius:50px;opacity:.7}
+.c1{width:150px;height:45px;top:25px;left:40px}
+.c2{width:120px;height:38px;top:55px;right:60px}
+.screen{display:none}
+.screen.active{display:block}
+.title{
+  background:linear-gradient(#ffce3d,#ff8c00);
+  border:5px solid #7a3900;
+  border-radius:18px;
+  padding:12px;
+  text-align:center;
+  color:white;
+  text-shadow:3px 3px #7a3900;
+  margin-bottom:18px;
+}
+.panel{
+  background:#fff7d6;
+  border:5px solid #8b4513;
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 8px 0 #6b350f;
+  margin:14px 0;
+}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+input,select{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:3px solid #f59e0b;
+  border-radius:14px;
+  font-size:16px;
+}
+.btn{
+  border:none;
+  border-radius:18px;
+  padding:14px 18px;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:8px;
+  color:white;
+  box-shadow:0 6px 0 #333;
+}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #333}
+.green{background:#22c55e}
+.orange{background:#f97316}
+.red{background:#ef4444}
+.blue{background:#3b82f6}
+.purple{background:#8b5cf6}
+.crystal{background:#06b6d4}
+.gold{background:#facc15;color:#78350f}
+.dark{background:#334155}
+.character-grid,.tile-grid,.answer-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+.card-btn{
+  background:white;
+  border:4px solid #7a3900;
+  border-radius:20px;
+  padding:16px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 6px 0 #8b4513;
+}
+.icon{font-size:44px;display:block}
+.player-list li{
+  list-style:none;
+  background:#fff;
+  border:3px solid #fbbf24;
+  border-radius:14px;
+  padding:10px;
+  margin:8px 0;
+}
+.question-box{
+  background:white;
+  border:5px solid #f97316;
+  border-radius:22px;
+  padding:20px;
+  font-size:20px;
+  text-align:center;
+}
+.timer{
+  background:#fee2e2;
+  color:#b91c1c;
+  border:4px solid #ef4444;
+  border-radius:16px;
+  padding:10px;
+  display:inline-block;
+  margin:10px 0;
+  font-weight:bold;
+}
+.score{
+  background:#14532d;
+  color:#fff;
+  border:4px solid #facc15;
+  border-radius:18px;
+  padding:12px;
+  text-align:center;
+  font-size:22px;
+}
+.result-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:14px;
+}
+.center{text-align:center}
+.small{font-size:14px;color:#444}
+@media(max-width:700px){
+  .row,.result-grid{grid-template-columns:1fr}
+  .character-grid,.tile-grid,.answer-grid{grid-template-columns:1fr}
+}
+#shop .panel{
+  text-align:center;
+}
+
+#shop .panel button{
+  display:inline-block;
+  min-width:300px;
+  margin:10px;
+}
+.winner-banner{
+  background:linear-gradient(135deg,#facc15,#f97316);
+  border:5px solid #7a3900;
+  border-radius:22px;
+  padding:18px;
+  text-align:center;
+  font-size:28px;
+  font-weight:bold;
+  color:white;
+  text-shadow:2px 2px #7a3900;
+  margin-bottom:18px;
+  box-shadow:0 8px 0 #6b350f;
+}
+
+#result .panel{
+  min-height:330px;
+}
+
+#result .player-list li:first-child{
+  background:linear-gradient(135deg,#fff7ad,#ffd166);
+  border:4px solid #f59e0b;
+  font-weight:bold;
+}
+
+#result .player-list li{
+  font-size:17px;
+}
+
+#mathCrystalText{
+  font-size:18px;
+  line-height:1.8;
+}
+
+#result .panel h2{
+  text-align:center;
+  font-size:26px;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+<section id="welcome" class="screen active">
+
+  <div class="welcome-container">
+
+    <div class="castle-icon">
+      🏰
+    </div>
+
+    <h1 class="game-title">
+      MATHQUEST<br>
+      KINGDOM RESCUE
+    </h1>
+
+    <p class="game-subtitle">
+      Hybrid Gamified Mathematics Board Game
+    </p>
+
+    <div class="story-box">
+
+      <h2>📖 Kingdom Story</h2>
+
+      <p>
+        The Math Kingdom has been attacked by dark magical forces.
+        Powerful bosses have stolen the magical Math Crystals.
+      </p>
+
+      <p>
+        Become a hero, solve mathematics challenges,
+        collect crystals, defeat bosses,
+        and rescue the kingdom!
+      </p>
+
+    </div>
+
+    <div class="benefit-box">
+
+      <h2>🌟 Benefits of This Game</h2>
+
+      <ul>
+
+        <li>
+          🧠 Develop Mathematical Problem-Solving Skills
+        </li>
+
+        <li>
+          💡 Improve Higher Order Thinking Skills (HOTS)
+        </li>
+
+        <li>
+          🎯 Increase Motivation and Learning Engagement
+        </li>
+
+        <li>
+          🤝 Encourage Teamwork and Collaboration
+        </li>
+
+        <li>
+          🎮 Fun Hybrid Learning Experience
+        </li>
+
+        <li>
+          🏆 Earn Rewards, Crystals and Power-Up Cards
+        </li>
+
+      </ul>
+
+    </div>
+
+<button class="btn green" onclick="show('register')">
+  🚀 START YOUR ADVENTURE
+</button>
+
+  </div>
+
+</section>
+  <!-- PAGE 1 REGISTER -->
+  <section id="register" class="screen">
+  <h1 class="title">👥 REGISTER PLAYERS</h1>
+
+  <div class="panel">
+    <h2>Player Information</h2>
+
+    <input id="p1" placeholder="Player 1 Name">
+    <select id="c1">
+      <option value="Knight ⚔️">Knight ⚔️</option>
+      <option value="Wizard 🧙">Wizard 🧙</option>
+      <option value="Archer 🏹">Archer 🏹</option>
+      <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+    </select>
+
+    <input id="p2" placeholder="Player 2 Name">
+    <select id="c2">
+      <option value="Knight ⚔️">Knight ⚔️</option>
+      <option value="Wizard 🧙">Wizard 🧙</option>
+      <option value="Archer 🏹">Archer 🏹</option>
+      <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+    </select>
+
+    <input id="p3" placeholder="Player 3 Name">
+    <select id="c3">
+      <option value="Knight ⚔️">Knight ⚔️</option>
+      <option value="Wizard 🧙">Wizard 🧙</option>
+      <option value="Archer 🏹">Archer 🏹</option>
+      <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+    </select>
+
+    <input id="p4" placeholder="Player 4 Name">
+    <select id="c4">
+      <option value="Knight ⚔️">Knight ⚔️</option>
+      <option value="Wizard 🧙">Wizard 🧙</option>
+      <option value="Archer 🏹">Archer 🏹</option>
+      <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+    </select>
+  </div>
+
+  <div class="center">
+    <button class="btn green" onclick="savePlayers()">SAVE PLAYERS ➜</button>
+  </div>
+</section>
+
+  <!-- PAGE 2 RULES -->
+  <section id="rules" class="screen">
+    <h1 class="title">📜 RULES OF GAME</h1>
+
+    <div class="panel">
+      <h2>🎲 Gameplay Rules</h2>
+      <p>1. Roll the dice and move on the physical board.</p>
+      <p>2. Teacher selects the tile type based on where the player lands.</p>
+      <p>3. Players answer the mathematics challenge.</p>
+      <p>4. Correct answer gives points and rewards.</p>
+      <p>5. Crystal Space gives crystal currency.</p>
+      <p>6. Math Crystals are unlocked through mathematics performance.</p>
+    </div>
+
+    <div class="panel">
+  <h2>🎴 Power-Up Cards</h2>
+
+  <p>💡 Hint Card = 🔵 Blue Crystal</p>
+  <p>⭐ Double Points = 🟢 Green Crystal</p>
+  <p>🛡 Skip Trap = 🟠 Orange Crystal</p>
+  <p>👢 Extra Move = 🟣 Purple Crystal</p>
+</div>
+
+    <div class="center">
+      <button class="btn blue" onclick="show('tileMenu')">LET'S PLAY ➜</button>
+    </div>
+    
+  </section>
+
+  <!-- PAGE 3 TILE MENU -->
+  <section id="tileMenu" class="screen">
+  <h1 class="title">🎯 MAIN MENU: CHOOSE TILE TYPE</h1>
+
+  <div class="panel">
+    <h2>👤 Select Current Player</h2>
+    <select id="currentPlayerSelect" onchange="setCurrentPlayer()"></select>
+  </div>
+
+  <div class="panel">
+    <h2>🌍 Select Zone</h2>
+    <select id="zoneSelect">
+      <option value="Forest of Numbers">Forest of Numbers</option>
+      <option value="Fraction Mountain">Fraction Mountain</option>
+      <option value="Money Market">Money Market</option>
+      <option value="HOTS Castle">HOTS Castle</option>
+    </select>
+  </div>
+
+  <div class="panel center">
+    <h2>Teacher Selects Tile Type</h2>
+
+    <div class="tile-grid">
+      <button class="btn green" onclick="startQuestion('Normal')">🌳 NORMAL</button>
+      <button class="btn orange" onclick="startQuestion('Bonus')">🎁 BONUS</button>
+      <button class="btn red" onclick="startQuestion('Trap')">💣 TRAP</button>
+      <button class="btn blue" onclick="startQuestion('Teamwork')">🤝 TEAMWORK</button>
+      <button class="btn purple" onclick="startQuestion('Boss')">
+  🐉 BOSS
+</button>
+      <button class="btn crystal" onclick="openShop()">
+  🛒 CRYSTAL SHOP
+</button>
+    </div>
+  </div>
+
+  <div class="center">
+  <button class="btn gold" onclick="showResult()">
+    🏆 VIEW RESULTS
+  </button>
+</div>
+
+</section>
+<section id="bossMenu" class="screen">
+  <h1 class="title">🐉 SELECT BOSS</h1>
+
+  <div class="panel center">
+    <button class="btn purple" onclick="startBoss('Forest of Numbers')">
+      👿 Boss 1 - Forest of Numbers
+    </button>
+
+    <button class="btn blue" onclick="startBoss('Fraction Mountain')">
+      ❄️ Boss 2 - Fraction Mountain
+    </button>
+
+    <button class="btn red" onclick="startBoss('Money Market')">
+      🐲 Boss 3 - Money Market
+    </button>
+
+    <button class="btn dark" onclick="startBoss('HOTS Castle')">
+      🧙 Final Boss - HOTS Castle
+    </button>
+  </div>
+
+  <div class="center">
+    <button class="btn green" onclick="show('tileMenu')">
+      ← Back to Menu
+    </button>
+  </div>
+</section>
+  <!-- PAGE 4 QUESTION -->
+  <section id="questionPage" class="screen">
+    <h1 class="title" id="questionTitle">QUESTION PAGE</h1>
+
+    <div class="center">
+      <span class="timer">⏰ Time Left: <span id="timer">90</span>s</span>
+    </div>
+
+  <div class="question-box">
+  <p><b>Player:</b> <span id="currentPlayer">Ali</span></p>
+  <p><b>Tile:</b> <span id="tileType">Bonus</span></p>
+  <hr><br>
+  <p id="questionText"></p>
+</div>
+
+
+<div class="center">
+  <button id="doubleBtn" class="btn gold" onclick="useDoublePoints()">
+  ⭐ Use Double Points
+</button>
+
+<button id="skipTrapBtn" class="btn red" onclick="useSkipTrap()">
+  🛡 Use Skip Trap
+</button><button id="hintBtn" class="btn blue" onclick="useHint()">
+  💡 Use Hint
+</button></div>
+<div class="answer-grid panel" id="answerBox"></div>
+
+<div class="center">
+  <button class="btn dark" onclick="show('tileMenu')">
+    ⬅ Back to Menu
+  </button>
+</div>
+  </section>
+
+  <!-- PAGE 5 FEEDBACK -->
+  <section id="feedback" class="screen">
+    <h1 class="title">⭐ CORRECT ANSWER!</h1>
+
+    <div class="panel center">
+      <div style="font-size:80px">🏆</div>
+      <h2 id="feedbackText">+20 Points</h2>
+      <p id="explainText"></p>
+      <div class="score">Total Score: <span id="totalScoreText">0</span></div>
+    </div>
+
+   <div class="center">
+  <button class="btn green" onclick="show('tileMenu')">
+    🎲 Continue Game
+  </button>
+</div>
+
+  </section>
+  <section id="shop" class="screen">
+  <h1 class="title">🛒 CRYSTAL SHOP</h1>
+
+  <div class="panel center">
+    <h2>Player: <span id="shopPlayer">-</span></h2>
+    <p>Use Math Crystals to buy Power-Up Cards.</p>
+  </div>
+
+  <div class="panel">
+    <button class="btn blue" onclick="buyPowerUp('hint')">
+      💡 Hint Card - 🔵 Blue Crystal
+    </button>
+
+    <button class="btn gold" onclick="buyPowerUp('double')">
+      ⭐ Double Points - 🟢 Green Crystal
+    </button>
+
+    <button class="btn red" onclick="buyPowerUp('skipTrap')">
+      🛡 Skip Trap - 🟠 Orange Crystal
+    </button>
+
+    <button class="btn purple" onclick="buyPowerUp('extraMove')">
+      👢 Extra Move - 🟣 Purple Crystal
+    </button>
+  </div>
+
+  <div class="panel">
+    <h2>💎 Crystals Owned</h2>
+    <p id="ownedCrystals">-</p>
+  </div>
+
+  <div class="center">
+    <button class="btn green" onclick="show('tileMenu')">
+      ← Back to Game
+    </button>
+  </div>
+</section>
+
+  <!-- PAGE 6 RESULT -->
+  <section id="result" class="screen">
+    <h1 class="title">🏆 KINGDOM RESCUED!</h1>
+<div class="winner-banner">
+  👑 CHAMPION: <span id="winnerName">-</span>
+</div>
+    <div class="result-grid">
+      <div class="panel">
+  <h2>🏅 Player Ranking</h2>
+  <ul id="playerList" class="player-list"></ul>
+</div>
+
+      <div class="panel center">
+        <h2>💎 Math Crystals</h2>
+        <p style="font-size:32px">🔵 🟢 🟠 🟣</p>
+        <p id="mathCrystalText">None</p>
+      </div>
+
+      <div class="panel">
+        <h2>📊 Summary</h2>
+        <p>Total Points: <b id="resultScore">0</b></p>
+        <p>Crystal Currency: <b id="resultCurrency">0</b></p>
+        <p>Power-Up Cards: <b id="resultPower">0</b></p>
+        <p>Bosses Defeated: <b id="resultBoss">0</b></p>
+      </div>
+    </div>
+
+    <div class="center">
+      <button class="btn blue" onclick="show('tileMenu')">← Back to Board</button>
+      <button class="btn green" onclick="show('welcome')">
+  🏰 Play Again
+</button>
+    </div>
+  </section>
+</div>
+
+<script>
+let players = [];
+let currentPlayerIndex = 0;
+let currentAnswer = "";
+let timerInterval;
+
+let crystalCurrency = 0;
+let powerCards = 0;
+let bossesDefeated = 0;
+
+let hintCards = 0;
+let doublePointCards = 0;
+let skipTrapCards = 0;
+let extraMoveCards = 0;
+let doublePointsActive = false;
+let skipTrapActive = false;
+let currentOptions = [];
+const questions = [
+  {
+    zone:"Forest of Numbers",
+    q:"A farmer has 48 apples and wants to divide them equally into 6 baskets. How many apples will each basket contain?",
+    options:["6","7","8","9"],
+    answer:"8",
+    explain:"48 ÷ 6 = 8 apples in each basket."
+  },
+  {
+    zone:"Forest of Numbers",
+    q:"Ali solved 24 × 5 using repeated addition, while Sara used multiplication directly. Which method is more efficient and why?",
+    options:["Ali, because repeated addition is faster","Sara, because multiplication is faster","Both are wrong","No answer"],
+    answer:"Sara, because multiplication is faster",
+    explain:"Multiplication is more efficient than repeated addition for larger groups."
+  },
+  {
+    zone:"Forest of Numbers",
+    q:"A bus carries 36 students. Another 14 students enter the bus, and 8 students leave. How many students are left?",
+    options:["40","42","44","50"],
+    answer:"42",
+    explain:"36 + 14 - 8 = 42 students."
+  },
+  {
+    zone:"Forest of Numbers",
+    q:"Arrange these numbers from largest to smallest: 0.9, 0.09, 0.99, 0.19.",
+    options:["0.99, 0.9, 0.19, 0.09","0.09, 0.19, 0.9, 0.99","0.9, 0.99, 0.19, 0.09","0.19, 0.09, 0.9, 0.99"],
+    answer:"0.99, 0.9, 0.19, 0.09",
+    explain:"Compare decimal place values carefully."
+  },
+  {
+    zone:"Forest of Numbers",
+    q:"Why is 1,250 greater than 1,205 even though both numbers start with 1?",
+    options:["Because 250 is greater than 205","Because 1 is greater than 0","Because 205 is greater","They are equal"],
+    answer:"Because 250 is greater than 205",
+    explain:"Compare hundreds, tens, and ones after the thousands place."
+  },
+
+  {
+    zone:"Fraction Mountain",
+    q:"Amir ate 3/8 of a pizza and Sara ate 2/8. What fraction of the pizza is left?",
+    options:["1/8","2/8","3/8","5/8"],
+    answer:"3/8",
+    explain:"8/8 - 3/8 - 2/8 = 3/8."
+  },
+  {
+    zone:"Fraction Mountain",
+    q:"Compare 5/6 and 7/9. Which is larger?",
+    options:["5/6","7/9","Same","Cannot compare"],
+    answer:"5/6",
+    explain:"5/6 = 15/18 and 7/9 = 14/18, so 5/6 is larger."
+  },
+  {
+    zone:"Fraction Mountain",
+    q:"A recipe needs 3/4 cup of sugar. Lina only has a 1/4 cup measuring tool. How many times must she use it?",
+    options:["2","3","4","5"],
+    answer:"3",
+    explain:"3/4 is made of three 1/4 cups."
+  },
+  {
+    zone:"Fraction Mountain",
+    q:"Why is 0.5 equal to 1/2?",
+    options:["Both mean half","Both mean one whole","0.5 is bigger","1/2 is bigger"],
+    answer:"Both mean half",
+    explain:"0.5 and 1/2 represent the same value."
+  },
+  {
+    zone:"Fraction Mountain",
+    q:"A student completed 2/5 of homework on Monday and 1/2 on Tuesday. Did the student finish all homework?",
+    options:["Yes","No","Exactly complete","Not enough information"],
+    answer:"No",
+    explain:"2/5 + 1/2 = 4/10 + 5/10 = 9/10, so not complete."
+  },
+
+  {
+    zone:"Money Market",
+    q:"A shirt costs RM80. During a sale, the price is reduced by 25%. What is the new price?",
+    options:["RM20","RM40","RM60","RM100"],
+    answer:"RM60",
+    explain:"25% of RM80 is RM20. RM80 - RM20 = RM60."
+  },
+  {
+    zone:"Money Market",
+    q:"Siti has RM50. She buys a book for RM18.50 and a bag for RM22.90. How much money does she have left?",
+    options:["RM8.60","RM9.60","RM10.60","RM11.60"],
+    answer:"RM8.60",
+    explain:"RM50 - RM18.50 - RM22.90 = RM8.60."
+  },
+  {
+    zone:"Money Market",
+    q:"Which is better: 20% discount on RM100 or 10% discount on RM200?",
+    options:["20% on RM100","10% on RM200","Both are the same","No discount"],
+    answer:"Both are the same",
+    explain:"Both discounts save RM20."
+  },
+  {
+    zone:"Money Market",
+    q:"A shop sold 125 apples in the morning and 87 apples in the afternoon. If the shop originally had 300 apples, how many apples are left?",
+    options:["78","88","98","108"],
+    answer:"88",
+    explain:"300 - 125 - 87 = 88."
+  },
+  {
+    zone:"Money Market",
+    q:"A family spends RM45 on groceries every week. How much will they spend in 4 weeks?",
+    options:["RM160","RM180","RM200","RM220"],
+    answer:"RM180",
+    explain:"RM45 × 4 = RM180."
+  },
+
+  {
+    zone:"HOTS Castle",
+    q:"A student says all squares are rectangles, but not all rectangles are squares. Do you agree?",
+    options:["Agree","Disagree","All rectangles are squares","Squares have 5 sides"],
+    answer:"Agree",
+    explain:"A square has all rectangle properties, but a rectangle does not need all sides equal."
+  },
+  {
+    zone:"HOTS Castle",
+    q:"Compare a square and a parallelogram. State one similarity and two differences.",
+    options:["Both are quadrilaterals","Both are circles","Both have 3 sides","Both are triangles"],
+    answer:"Both are quadrilaterals",
+    explain:"Both have 4 sides. A square has equal sides and right angles."
+  },
+  {
+    zone:"HOTS Castle",
+    q:"A triangle has two angles measuring 45° and 65°. What is the third angle?",
+    options:["60°","70°","80°","90°"],
+    answer:"70°",
+    explain:"180° - 45° - 65° = 70°."
+  },
+  {
+    zone:"HOTS Castle",
+    q:"Two students solved the same problem differently. Student A used a diagram while Student B used equations. Which method is better?",
+    options:["Diagram only","Equation only","Depends on the problem and explanation","Both wrong"],
+    answer:"Depends on the problem and explanation",
+    explain:"Different methods can be correct if the reasoning is clear."
+  },
+  {
+    zone:"HOTS Castle",
+    q:"During a board game challenge, a player earns 150 points, loses 45 points, and then earns another 90 points. What is the final score?",
+    options:["185","195","205","215"],
+    answer:"195",
+    explain:"150 - 45 + 90 = 195."
+  }
+];
+function updatePlayerDropdown(){
+  const select = document.getElementById("currentPlayerSelect");
+  select.innerHTML = "";
+
+  players.forEach((player, index) => {
+    const option = document.createElement("option");
+    option.value = index;
+    option.textContent = `${index + 1}. ${player.name} - ${player.character}`;
+    select.appendChild(option);
+  });
+
+  select.value = currentPlayerIndex;
+}
+
+function updateSkipTrapButton(){
+  const btn = document.getElementById("skipTrapBtn");
+  const player = players[currentPlayerIndex];
+
+  if(tileTypeIsTrap() && player.cards.skipTrap > 0){
+    btn.style.display = "inline-block";
+    btn.innerText = `🛡 Use Skip Trap (${player.cards.skipTrap})`;
+  } else {
+    btn.style.display = "none";
+  }
+}
+
+function useSkipTrap(){
+  const player = players[currentPlayerIndex];
+
+  if(player.cards.skipTrap <= 0){
+    alert(`${player.name} has no Skip Trap Card!`);
+    return;
+  }
+
+  player.cards.skipTrap--;
+  skipTrapActive = true;
+
+  updateSkipTrapButton();
+
+  alert(`🛡 ${player.name} activated Skip Trap! Trap penalty will be ignored.`);
+}
+
+function useHint(){
+  const player = players[currentPlayerIndex];
+
+  if(player.cards.hint <= 0){
+    alert(`${player.name} has no Hint Card!`);
+    return;
+  }
+
+  player.cards.hint--;
+
+  const buttons = document.querySelectorAll("#answerBox button");
+  let wrongButtons = [];
+
+  buttons.forEach(btn => {
+    if(btn.innerText !== currentAnswer){
+      wrongButtons.push(btn);
+    }
+  });
+
+  wrongButtons.sort(() => Math.random() - 0.5);
+
+  if(wrongButtons.length >= 2){
+    wrongButtons[0].style.display = "none";
+    wrongButtons[1].style.display = "none";
+  }
+
+  updateHintButton();
+
+  alert(`💡 ${player.name} used Hint Card! Two wrong answers removed.`);
+}
+
+function tileTypeIsTrap(){
+  return document.getElementById("tileType").innerText.includes("Trap");
+}
+
+function updateDoubleButton(){
+  const btn = document.getElementById("doubleBtn");
+  const player = players[currentPlayerIndex];
+
+  if(player.cards.double > 0){
+    btn.style.display = "inline-block";
+    btn.innerText = `⭐ Use Double Points (${player.cards.double})`;
+  } else {
+    btn.style.display = "none";
+  }
+}
+
+function updateHintButton(){
+  const btn = document.getElementById("hintBtn");
+  const player = players[currentPlayerIndex];
+
+  if(player.cards.hint > 0){
+    btn.style.display = "inline-block";
+    btn.innerText = `💡 Use Hint (${player.cards.hint})`;
+  } else {
+    btn.style.display = "none";
+  }
+}
+
+function buyPowerUp(type){
+  const player = players[currentPlayerIndex];
+
+  if(type === "hint"){
+    if(player.crystals.blue <= 0){
+      alert("Not enough Blue Crystal!");
+      return;
+    }
+
+    player.crystals.blue--;
+    player.cards.hint++;
+
+    alert(`💡 ${player.name} now has Hint Card!`);
+  }
+
+  if(type === "double"){
+    if(player.crystals.green <= 0){
+      alert("Not enough Green Crystal!");
+      return;
+    }
+
+    player.crystals.green--;
+    player.cards.double++;
+
+    alert(`⭐ ${player.name} now has Double Points Card!`);
+  }
+
+  if(type === "skipTrap"){
+    if(player.crystals.orange <= 0){
+      alert("Not enough Orange Crystal!");
+      return;
+    }
+
+    player.crystals.orange--;
+    player.cards.skipTrap++;
+
+    alert(`🛡 ${player.name} now has Skip Trap Card!`);
+  }
+
+  if(type === "extraMove"){
+    if(player.crystals.purple <= 0){
+      alert("Not enough Purple Crystal!");
+      return;
+    }
+
+    player.crystals.purple--;
+    player.cards.extraMove++;
+
+    alert(`👢 ${player.name} now has Extra Move Card!`);
+  }
+
+  updateShop();
+updateHintButton();
+updateDoubleButton();
+updateSkipTrapButton();
+}
+
+function getZoneByTile(tileNumber){
+  if(tileNumber >= 1 && tileNumber <= 25){
+    return "Forest of Numbers";
+  }
+
+  if(tileNumber >= 26 && tileNumber <= 51){
+    return "Fraction Mountain";
+  }
+
+  if(tileNumber >= 52 && tileNumber <= 76){
+    return "Money Market";
+  }
+
+  if(tileNumber >= 77 && tileNumber <= 100){
+    return "HOTS Castle";
+  }
+
+  return "";
+}
+function setCurrentPlayer(){
+  currentPlayerIndex = Number(document.getElementById("currentPlayerSelect").value);
+}
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function chooseChar(char){
+  selectedCharacter = char;
+  document.getElementById("charText").innerText = char;
+}
+function updateShop(){
+  const player = players[currentPlayerIndex];
+
+  document.getElementById("shopPlayer").innerText =
+    `${player.name} - ${player.character}`;
+
+  document.getElementById("ownedCrystals").innerText =
+    `🔵 ${player.crystals.blue} | 🟢 ${player.crystals.green} | 🟠 ${player.crystals.orange} | 🟣 ${player.crystals.purple}`;
+}
+
+function openShop(){
+  updateShop();
+  show("shop");
+}
+function savePlayers(){
+  const p1 = document.getElementById("p1").value.trim();
+  const p2 = document.getElementById("p2").value.trim();
+  const p3 = document.getElementById("p3").value.trim();
+  const p4 = document.getElementById("p4").value.trim();
+
+  if(!p1 || !p2 || !p3 || !p4){
+    alert("Please enter all 4 player names before starting the game.");
+    return;
+  }
+
+  players = [
+  {
+    name: p1,
+    character: document.getElementById("c1").value,
+    points: 0,
+    crystals: { blue: 0, green: 0, orange: 0, purple: 0 },
+    cards: { hint: 0, double: 0, skipTrap: 0, extraMove: 0 }
+  },
+  {
+    name: p2,
+    character: document.getElementById("c2").value,
+    points: 0,
+    crystals: { blue: 0, green: 0, orange: 0, purple: 0 },
+    cards: { hint: 0, double: 0, skipTrap: 0, extraMove: 0 }
+  },
+  {
+    name: p3,
+    character: document.getElementById("c3").value,
+    points: 0,
+    crystals: { blue: 0, green: 0, orange: 0, purple: 0 },
+    cards: { hint: 0, double: 0, skipTrap: 0, extraMove: 0 }
+  },
+  {
+    name: p4,
+    character: document.getElementById("c4").value,
+    points: 0,
+    crystals: { blue: 0, green: 0, orange: 0, purple: 0 },
+    cards: { hint: 0, double: 0, skipTrap: 0, extraMove: 0 }
+  }
+];
+
+  updatePlayerDropdown();
+  show("rules");
+}
+
+function startBoss(zone){
+  document.getElementById("zoneSelect").value = zone;
+  startQuestion("Boss");
+}
+function useDoublePoints(){
+  const player = players[currentPlayerIndex];
+
+  if(player.cards.double <= 0){
+    alert(`${player.name} has no Double Points Card!`);
+    return;
+  }
+
+  player.cards.double--;
+  doublePointsActive = true;
+
+  updateDoubleButton();
+
+  alert(`⭐ ${player.name} activated Double Points!`);
+}
+function startQuestion(tile){
+  const selectedZone = document.getElementById("zoneSelect").value;
+
+  const zoneQuestions = questions.filter(q => q.zone === selectedZone);
+
+  const random =
+    zoneQuestions[Math.floor(Math.random() * zoneQuestions.length)];
+
+  currentAnswer = random.answer;
+  currentOptions = random.options;
+
+  document.getElementById("questionTitle").innerText =
+    `${tile.toUpperCase()} QUESTION PAGE`;
+
+  document.getElementById("currentPlayer").innerText =
+    `${players[currentPlayerIndex].name} - ${players[currentPlayerIndex].character}`;
+
+  document.getElementById("tileType").innerText =
+    `${selectedZone} | ${tile}`;
+
+  document.getElementById("questionText").innerText = random.q;
+
+  const answerBox = document.getElementById("answerBox");
+  answerBox.innerHTML = "";
+
+  random.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "card-btn";
+    btn.innerText = opt;
+    btn.onclick = () => checkAnswer(opt, tile, random.explain);
+    answerBox.appendChild(btn);
+  });
+  
+updateHintButton();
+updateDoubleButton();
+updateSkipTrapButton();
+  startTimer();
+  show("questionPage");
+}
+
+
+function awardZoneCrystal(zone){
+  const player = players[currentPlayerIndex];
+
+  if(zone === "Forest of Numbers"){
+    player.crystals.blue++;
+    return "🔵 Blue Crystal Earned!";
+  }
+
+  if(zone === "Fraction Mountain"){
+    player.crystals.green++;
+    return "🟢 Green Crystal Earned!";
+  }
+
+  if(zone === "Money Market"){
+    player.crystals.orange++;
+    return "🟠 Orange Crystal Earned!";
+  }
+
+  if(zone === "HOTS Castle"){
+    player.crystals.purple++;
+    return "🟣 Purple Crystal Earned!";
+  }
+
+  return "";
+}
+function checkAnswer(selected, tile, explain){
+  clearInterval(timerInterval);
+
+  if(selected === currentAnswer){
+  let added = 10;
+
+  if(tile === "Normal") added = 10;
+  if(tile === "Bonus") added = 20;
+  if(tile === "Teamwork") added = 15;
+
+  if(tile === "Boss"){
+    const selectedZone = document.getElementById("zoneSelect").value;
+
+    if(selectedZone === "HOTS Castle"){
+      added = 50;
+    } else {
+      added = 30;
+    }
+  }
+
+  if(tile === "Trap") added = 5;
+
+  // ADD DOUBLE POINTS HERE
+  if(doublePointsActive){
+    added = added * 2;
+    doublePointsActive = false;
+
+    alert("⭐ Double Points Used!");
+  }
+
+  if(tile === "Teamwork"){
+    players.forEach(player => {
+      player.points += added;
+    });
+
+    document.getElementById("feedbackText").innerText =
+      `🤝 Team Success! All Players +${added} Points`;
+  } else {
+    players[currentPlayerIndex].points += added;
+
+    document.getElementById("feedbackText").innerText =
+      `⭐ +${added} Points`;
+  }
+
+
+    if(tile === "Boss"){
+  bossesDefeated++;
+
+  const selectedZone = document.getElementById("zoneSelect").value;
+  const crystalMessage = awardZoneCrystal(selectedZone);
+
+  document.getElementById("feedbackText").innerText =
+    `🐉 Boss Defeated! +${added} Points | ${crystalMessage}`;
+}
+
+  } else {
+   if(tile === "Trap"){
+
+  if(skipTrapActive){
+    skipTrapActive = false;
+
+    document.getElementById("feedbackText").innerText =
+      "🛡 Skip Trap Used! No penalty.";
+  } else {
+    players[currentPlayerIndex].points -= 10;
+
+    if(players[currentPlayerIndex].points < 0){
+      players[currentPlayerIndex].points = 0;
+    }
+
+    document.getElementById("feedbackText").innerText =
+      "💣 Trap Failed! -10 Points";
+  }
+}
+  }
+
+  document.getElementById("explainText").innerText = explain;
+
+  document.getElementById("totalScoreText").innerText =
+    players[currentPlayerIndex].points;
+
+  show("feedback");
+}
+
+function crystalSpace(){
+  crystalCurrency++;
+
+  document.getElementById("feedbackText").innerText =
+    "💎 Crystal Space Reward!";
+
+  document.getElementById("explainText").innerText =
+    "+1 Crystal Currency. You may exchange crystals at the Crystal Shop.";
+
+  document.getElementById("totalScoreText").innerText =
+    players[currentPlayerIndex].points;
+
+  updateShop();
+  show("feedback");
+}
+
+function nextPlayer(){
+  currentPlayerIndex++;
+  if(currentPlayerIndex >= 4) currentPlayerIndex = 0;
+  show("tileMenu");
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  let time = 60;
+  document.getElementById("timer").innerText = time;
+
+  timerInterval = setInterval(()=>{
+    time--;
+    document.getElementById("timer").innerText = time;
+
+   if(time <= 0){
+  clearInterval(timerInterval);
+
+  alert("⏰ Time's Up!");
+
+  document.getElementById("feedbackText").innerText =
+    "⏰ Time's Up!";
+
+  document.getElementById("explainText").innerText =
+    "No points earned this round.";
+
+  document.getElementById("totalScoreText").innerText =
+    players[currentPlayerIndex].points;
+
+  show("feedback");
+}
+  },1000);
+}
+
+function showResult(){
+  const list = document.getElementById("playerList");
+  list.innerHTML = "";
+
+  const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
+
+  sortedPlayers.forEach((p, i) => {
+    const li = document.createElement("li");
+
+    if (i === 0) {
+      li.innerText = `🏆 ${p.name} - ${p.character} : ${p.points} points`;
+    } else {
+      li.innerText = `${i + 1}. ${p.name} - ${p.character} : ${p.points} points`;
+    }
+
+    list.appendChild(li);
+  });
+
+  const winner = sortedPlayers[0];
+document.getElementById("winnerName").innerText =
+  `${winner.name} ${winner.character}`;
+  document.getElementById("mathCrystalText").innerText =
+  `Winner: ${winner.name} ${winner.character}
+🔵 ${winner.crystals.blue}  🟢 ${winner.crystals.green}  🟠 ${winner.crystals.orange}  🟣 ${winner.crystals.purple}`;
+
+  document.getElementById("resultScore").innerText =
+    winner.points;
+
+  document.getElementById("resultCurrency").innerText = crystalCurrency;
+  document.getElementById("resultPower").innerText =
+  hintCards + doublePointCards + skipTrapCards;
+  document.getElementById("resultBoss").innerText = bossesDefeated;
+
+  show("result");
+}
+
+
+</script>
+</body>
+</html>
