@@ -331,49 +331,91 @@ input,select{
 
 </section>
   <!-- PAGE 1 REGISTER -->
-  <section id="register" class="screen">
+  
+<!-- PAGE 1 REGISTER -->
+<section id="register" class="screen">
   <h1 class="title">👥 REGISTER PLAYERS</h1>
 
   <div class="panel">
     <h2>Player Information</h2>
 
-    <input id="p1" placeholder="Player 1 Name">
-    <select id="c1">
-      <option value="Knight ⚔️">Knight ⚔️</option>
-      <option value="Wizard 🧙">Wizard 🧙</option>
-      <option value="Archer 🏹">Archer 🏹</option>
-      <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+    <!-- NUMBER OF PLAYERS -->
+    <label for="playerCount"><strong>Number of Players</strong></label>
+    <select id="playerCount" onchange="updatePlayerFields()">
+      <option value="2">2 Players</option>
+      <option value="3">3 Players</option>
+      <option value="4" selected>4 Players</option>
     </select>
 
-    <input id="p2" placeholder="Player 2 Name">
-    <select id="c2">
-      <option value="Knight ⚔️">Knight ⚔️</option>
-      <option value="Wizard 🧙">Wizard 🧙</option>
-      <option value="Archer 🏹">Archer 🏹</option>
-      <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
-    </select>
+    <!-- PLAYER 1 -->
+    <div class="player-entry">
+      <input id="p1" placeholder="Player 1 Name" required>
+      <select id="c1">
+        <option value="Knight ⚔️">Knight ⚔️</option>
+        <option value="Wizard 🧙">Wizard 🧙</option>
+        <option value="Archer 🏹">Archer 🏹</option>
+        <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+      </select>
+    </div>
 
-    <input id="p3" placeholder="Player 3 Name">
-    <select id="c3">
-      <option value="Knight ⚔️">Knight ⚔️</option>
-      <option value="Wizard 🧙">Wizard 🧙</option>
-      <option value="Archer 🏹">Archer 🏹</option>
-      <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
-    </select>
+    <!-- PLAYER 2 -->
+    <div class="player-entry">
+      <input id="p2" placeholder="Player 2 Name" required>
+      <select id="c2">
+        <option value="Knight ⚔️">Knight ⚔️</option>
+        <option value="Wizard 🧙">Wizard 🧙</option>
+        <option value="Archer 🏹">Archer 🏹</option>
+        <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+      </select>
+    </div>
 
-    <input id="p4" placeholder="Player 4 Name">
-    <select id="c4">
-      <option value="Knight ⚔️">Knight ⚔️</option>
-      <option value="Wizard 🧙">Wizard 🧙</option>
-      <option value="Archer 🏹">Archer 🏹</option>
-      <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
-    </select>
+    <!-- PLAYER 3 -->
+    <div class="player-entry" id="player3Fields">
+      <input id="p3" placeholder="Player 3 Name">
+      <select id="c3">
+        <option value="Knight ⚔️">Knight ⚔️</option>
+        <option value="Wizard 🧙">Wizard 🧙</option>
+        <option value="Archer 🏹">Archer 🏹</option>
+        <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+      </select>
+    </div>
+
+    <!-- PLAYER 4 -->
+    <div class="player-entry" id="player4Fields">
+      <input id="p4" placeholder="Player 4 Name">
+      <select id="c4">
+        <option value="Knight ⚔️">Knight ⚔️</option>
+        <option value="Wizard 🧙">Wizard 🧙</option>
+        <option value="Archer 🏹">Archer 🏹</option>
+        <option value="Dragon Warrior 🐉">Dragon Warrior 🐉</option>
+      </select>
+    </div>
   </div>
 
   <div class="center">
-    <button class="btn green" onclick="savePlayers()">SAVE PLAYERS ➜</button>
+    <button class="btn green" onclick="savePlayers()">
+      SAVE PLAYERS ➜
+    </button>
   </div>
 </section>
+
+<script>
+function updatePlayerFields() {
+  const count = Number(
+    document.getElementById("playerCount").value
+  );
+
+  document.getElementById("player3Fields").style.display =
+    count >= 3 ? "" : "none";
+
+  document.getElementById("player4Fields").style.display =
+    count >= 4 ? "" : "none";
+}
+
+// Set the correct fields when the page loads
+updatePlayerFields();
+</script>
+
 
   <!-- PAGE 2 RULES -->
   <!-- PAGE 2 RULES -->
@@ -1000,47 +1042,49 @@ function openShop(){
   updateShop();
   show("shop");
 }
-function savePlayers(){
-  const p1 = document.getElementById("p1").value.trim();
-  const p2 = document.getElementById("p2").value.trim();
-  const p3 = document.getElementById("p3").value.trim();
-  const p4 = document.getElementById("p4").value.trim();
 
-  if(!p1 || !p2 || !p3 || !p4){
-    alert("Please enter all 4 player names before starting the game.");
-    return;
+function savePlayers() {
+  const count = Number(
+    document.getElementById("playerCount").value
+  );
+
+  const newPlayers = [];
+
+  // Validate and register only the selected players
+  for (let i = 1; i <= count; i++) {
+    const name = document.getElementById(`p${i}`).value.trim();
+
+    if (!name) {
+      alert(`Please enter Player ${i}'s name.`);
+      document.getElementById(`p${i}`).focus();
+      return;
+    }
+
+    newPlayers.push({
+      name: name,
+      character: document.getElementById(`c${i}`).value,
+      points: 0,
+      crystals: {
+        blue: 0,
+        green: 0,
+        orange: 0,
+        purple: 0
+      },
+      cards: {
+        hint: 0,
+        double: 0,
+        skipTrap: 0,
+        extraMove: 0
+      }
+    });
   }
 
-  players = [
-  {
-    name: p1,
-    character: document.getElementById("c1").value,
-    points: 0,
-    crystals: { blue: 0, green: 0, orange: 0, purple: 0 },
-    cards: { hint: 0, double: 0, skipTrap: 0, extraMove: 0 }
-  },
-  {
-    name: p2,
-    character: document.getElementById("c2").value,
-    points: 0,
-    crystals: { blue: 0, green: 0, orange: 0, purple: 0 },
-    cards: { hint: 0, double: 0, skipTrap: 0, extraMove: 0 }
-  },
-  {
-    name: p3,
-    character: document.getElementById("c3").value,
-    points: 0,
-    crystals: { blue: 0, green: 0, orange: 0, purple: 0 },
-    cards: { hint: 0, double: 0, skipTrap: 0, extraMove: 0 }
-  },
-  {
-    name: p4,
-    character: document.getElementById("c4").value,
-    points: 0,
-    crystals: { blue: 0, green: 0, orange: 0, purple: 0 },
-    cards: { hint: 0, double: 0, skipTrap: 0, extraMove: 0 }
-  }
-];
+  // Save the selected players
+  players = newPlayers;
+
+  // Continue to your existing game flow
+  // Keep your existing code here that runs after players are saved.
+}
 
   updatePlayerDropdown();
   show("rules");
