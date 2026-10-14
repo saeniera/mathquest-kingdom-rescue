@@ -1079,13 +1079,11 @@ function savePlayers() {
     });
   }
 
-  // Save the selected players
+  // Save the selected players and reset the turn
   players = newPlayers;
+  currentPlayerIndex = 0;
 
-  // Continue to your existing game flow
-  // Keep your existing code here that runs after players are saved.
-}
-
+  // Refresh the active-player dropdown and continue to the rules
   updatePlayerDropdown();
   show("rules");
 }
@@ -1288,8 +1286,9 @@ function crystalSpace(){
 }
 
 function nextPlayer(){
+  if (!players.length) return;
   currentPlayerIndex++;
-  if(currentPlayerIndex >= 4) currentPlayerIndex = 0;
+  if (currentPlayerIndex >= players.length) currentPlayerIndex = 0;
   show("tileMenu");
 }
 
