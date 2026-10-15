@@ -424,16 +424,15 @@ updatePlayerFields();
 
   <div class="panel">
     <h2>🎲 Gameplay Rules</h2>
-    <p>1. Roll the dice and move on the physical board.</p>
-    <p>2. The teacher registers 2–4 players. Players take turns in the order shown in the player list.</p>
+    <p>1. The teacher registers 2–4 players. Players take turns in the order shown in the player list.</p>
     <p>2. On their turn, the player rolls the dice and moves their token on the physical board. The teacher selects the zone and tile type where the player lands.</p>
     <p>3. The player answers the mathematics question within the time limit.</p>
     <p>4. A correct answer earns the points shown for that tile and any applicable reward.</p>
     <p>5. An incorrect answer means the player moves back 2 spaces on the physical board. On a Trap tile, the existing 10-point penalty also applies unless a Skip Trap Card is used.</p>
     <p>6. There are no lives. Players keep their earned points and Math Crystals, subject to the stated tile and card effects.</p>
-  <p>  7. Defeating a Boss awards points and a Math Crystal. The teacher manages progression between zones on the physical board.</p>
-<p> 8. After every player has completed the board and the required final challenge, the teacher selects VIEW RESULTS. The player with the highest total points is the Kingdom Champion. If there is a tie, the tied players share the top ranking.
- </p> </div>
+    <p>7. Defeating a Boss awards points and a Math Crystal. The teacher manages progression between zones on the physical board.</p>
+    <p>8. After every player has completed the board and the required final challenge, the teacher selects VIEW RESULTS. The player with the highest total points is the Kingdom Champion. If there is a tie, the tied players share the top ranking.</p>
+  </div>
 
   <div class="panel">
     <h2>🎯 Tile Types & Scoring System</h2>
@@ -599,8 +598,8 @@ updatePlayerFields();
     </div>
 
    <div class="center">
-  <button class="btn green" onclick="show('tileMenu')">
-    🎲 Continue Game
+  <button class="btn green" onclick="nextPlayer()">
+    🎲 Continue to Next Player
   </button>
 </div>
 
@@ -696,6 +695,7 @@ let extraMoveCards = 0;
 let doublePointsActive = false;
 let skipTrapActive = false;
 let currentOptions = [];
+let currentQuestionResolved = false;
 const questions = [
   {
     zone:"Forest of Numbers",
@@ -1134,6 +1134,8 @@ function startQuestion(tile){
   const answerBox = document.getElementById("answerBox");
   answerBox.innerHTML = "";
 
+  currentQuestionResolved = false;
+
   random.options.forEach(opt => {
     const btn = document.createElement("button");
     btn.className = "card-btn";
@@ -1176,7 +1178,10 @@ function awardZoneCrystal(zone){
   return "";
 }
 function checkAnswer(selected, tile, explain){
+  if (currentQuestionResolved) return;
+  currentQuestionResolved = true;
   clearInterval(timerInterval);
+  document.querySelectorAll("#answerBox button").forEach(btn => btn.disabled = true);
 
   if(selected === currentAnswer){
   let added = 10;
@@ -1231,36 +1236,28 @@ function checkAnswer(selected, tile, explain){
 }
 
   } else {
+    // Movement is tracked on the physical board by the teacher.
+    // Assumption: every incorrect answer causes the player to move back 2 spaces.
+    let feedback = "❌ Incorrect answer! Move back 2 spaces on the physical board.";
 
     if(tile === "Trap"){
-
       if(skipTrapActive){
         skipTrapActive = false;
-
-        document.getElementById("feedbackText").innerText =
-          "🛡 Skip Trap Used! No penalty.";
+        feedback += " Skip Trap Card used, so the Trap's point penalty is avoided.";
       } else {
         players[currentPlayerIndex].points -= 10;
-
         if(players[currentPlayerIndex].points < 0){
           players[currentPlayerIndex].points = 0;
         }
-
-        document.getElementById("feedbackText").innerText =
-          "💣 Trap Failed! -10 Points";
+        feedback += " Trap penalty: −10 points.";
       }
-
     } else if(tile === "Teamwork"){
-
-      document.getElementById("feedbackText").innerText =
-        "🤝 Teamwork Failed! No points awarded.";
-
+      feedback += " No Teamwork points awarded.";
     } else {
-
-      document.getElementById("feedbackText").innerText =
-        "❌ Incorrect Answer! No points awarded.";
-
+      feedback += " No points awarded.";
     }
+
+    document.getElementById("feedbackText").innerText = feedback;
   }
 
   document.getElementById("explainText").innerText = explain;
@@ -1289,37 +1286,39 @@ function crystalSpace(){
 
 function nextPlayer(){
   if (!players.length) return;
-  currentPlayerIndex++;
-  if (currentPlayerIndex >= players.length) currentPlayerIndex = 0;
+  currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+  const select = document.getElementById("currentPlayerSelect");
+  if(select) select.value = String(currentPlayerIndex);
   show("tileMenu");
 }
 
 function startTimer(){
   clearInterval(timerInterval);
   let time = 60;
-  document.getElementById("timer").innerText = time;
+  const timerDisplay = document.getElementById("timer");
+  timerDisplay.innerText = time;
 
-  timerInterval = setInterval(()=>{
+  timerInterval = setInterval(() => {
     time--;
-    document.getElementById("timer").innerText = time;
+    timerDisplay.innerText = time;
 
-   if(time <= 0){
-  clearInterval(timerInterval);
+    if (time <= 0) {
+      clearInterval(timerInterval);
+      if (currentQuestionResolved) return;
+      currentQuestionResolved = true;
 
-  alert("⏰ Time's Up!");
+      document.querySelectorAll("#answerBox button").forEach(btn => btn.disabled = true);
 
-  document.getElementById("feedbackText").innerText =
-    "⏰ Time's Up!";
+      document.getElementById("feedbackText").innerText =
+        "⏰ Time's up! No points awarded. Move back 2 spaces on the physical board.";
+      document.getElementById("explainText").innerText =
+        "The 60-second limit has ended. The teacher should move the player's token back 2 spaces.";
+      document.getElementById("totalScoreText").innerText =
+        players[currentPlayerIndex].points;
 
-  document.getElementById("explainText").innerText =
-    "No points earned this round.";
-
-  document.getElementById("totalScoreText").innerText =
-    players[currentPlayerIndex].points;
-
-  show("feedback");
-}
-  },1000);
+      show("feedback");
+    }
+  }, 1000);
 }
 
 function showResult(){
