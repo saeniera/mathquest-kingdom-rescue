@@ -555,7 +555,7 @@ updatePlayerFields();
     <h1 class="title" id="questionTitle">QUESTION PAGE</h1>
 
     <div class="center">
-      <span class="timer">⏰ Time Left: <span id="timer">90</span>s</span>
+      <span class="timer">⏰ Time Left: <span id="timer">60</span>s</span>
     </div>
 
   <div class="question-box">
@@ -568,14 +568,18 @@ updatePlayerFields();
 
 <div class="center">
   <button id="doubleBtn" class="btn gold" onclick="useDoublePoints()">
-  ⭐ Use Double Points
-</button>
-
-<button id="skipTrapBtn" class="btn red" onclick="useSkipTrap()">
-  🛡 Use Skip Trap
-</button><button id="hintBtn" class="btn blue" onclick="useHint()">
-  💡 Use Hint
-</button></div>
+    ⭐ Use Double Points
+  </button>
+  <button id="skipTrapBtn" class="btn red" onclick="useSkipTrap()">
+    🛡 Use Skip Trap
+  </button>
+  <button id="hintBtn" class="btn blue" onclick="useHint()">
+    💡 Use Hint
+  </button>
+  <button id="questionShopBtn" class="btn crystal" onclick="openShop()">
+    🛒 Crystal Shop
+  </button>
+</div>
 <div class="answer-grid panel" id="answerBox"></div>
 
 <div class="center">
@@ -635,7 +639,7 @@ updatePlayerFields();
   </div>
 
   <div class="center">
-    <button class="btn green" onclick="show('tileMenu')">
+    <button class="btn green" onclick="returnFromShop()">
       ← Back to Game
     </button>
   </div>
@@ -682,6 +686,8 @@ let players = [];
 let currentPlayerIndex = 0;
 let currentAnswer = "";
 let timerInterval;
+let timeLeft = 60;
+let shopReturnScreen = "tileMenu";
 
 let crystalCurrency = 0;
 let powerCards = 0;
@@ -1040,8 +1046,25 @@ function updateShop(){
 }
 
 function openShop(){
+  const activeScreen = document.querySelector(".screen.active");
+  shopReturnScreen = activeScreen ? activeScreen.id : "tileMenu";
+
+  // Pause the question timer while the player visits the Crystal Shop.
+  if (shopReturnScreen === "questionPage") {
+    clearInterval(timerInterval);
+  }
+
   updateShop();
   show("shop");
+}
+
+function returnFromShop(){
+  show(shopReturnScreen);
+
+  // Resume the remaining time if the player returns to an active question.
+  if (shopReturnScreen === "questionPage" && !currentQuestionResolved) {
+    resumeTimer();
+  }
 }
 
 function savePlayers() {
@@ -1293,15 +1316,21 @@ function nextPlayer(){
 
 function startTimer(){
   clearInterval(timerInterval);
-  let time = 60;
+  timeLeft = 60;
+  document.getElementById("timer").innerText = timeLeft;
+  resumeTimer();
+}
+
+function resumeTimer(){
+  clearInterval(timerInterval);
   const timerDisplay = document.getElementById("timer");
-  timerDisplay.innerText = time;
+  timerDisplay.innerText = timeLeft;
 
   timerInterval = setInterval(() => {
-    time--;
-    timerDisplay.innerText = time;
+    timeLeft--;
+    timerDisplay.innerText = timeLeft;
 
-    if (time <= 0) {
+    if (timeLeft <= 0) {
       clearInterval(timerInterval);
       if (currentQuestionResolved) return;
       currentQuestionResolved = true;
@@ -1319,7 +1348,6 @@ function startTimer(){
     }
   }, 1000);
 }
-
 function showResult(){
   const list = document.getElementById("playerList");
   list.innerHTML = "";
