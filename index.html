@@ -1237,7 +1237,7 @@ function checkAnswer(selected, tile, explain){
   } else {
     // Movement is tracked on the physical board by the teacher.
     // Assumption: every incorrect answer causes the player to move back 2 spaces.
-    let feedback = "❌ Incorrect answer! Move back 2 spaces on the physical board.";
+    let feedback = "❌ Incorrect answer!";
 
     if(tile === "Trap"){
       if(skipTrapActive){
@@ -1309,9 +1309,9 @@ function startTimer(){
       document.querySelectorAll("#answerBox button").forEach(btn => btn.disabled = true);
 
       document.getElementById("feedbackText").innerText =
-        "⏰ Time's up! No points awarded. Move back 2 spaces on the physical board.";
+        "⏰ Time's up! No points awarded.";
       document.getElementById("explainText").innerText =
-        "The 60-second limit has ended. The teacher should move the player's token back 2 spaces.";
+        "The 60-second limit has ended.";
       document.getElementById("totalScoreText").innerText =
         players[currentPlayerIndex].points;
 
