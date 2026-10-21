@@ -576,6 +576,9 @@ updatePlayerFields();
   <button id="hintBtn" class="btn blue" onclick="useHint()">
     💡 Use Hint
   </button>
+  <button id="extraMoveBtn" class="btn purple" onclick="useExtraMove()" style="display:none">
+    👢 Use Extra Move
+  </button>
   <button id="questionShopBtn" class="btn crystal" onclick="openShop()">
     🛒 Crystal Shop
   </button>
@@ -1202,6 +1205,26 @@ function updateDoubleButton(){
   }
 }
 
+function useExtraMove(){
+  const player = players[currentPlayerIndex];
+  if (!player || !player.cards || player.cards.extraMove <= 0) {
+    alert("You do not have an Extra Move Card.");
+    return;
+  }
+  if (currentQuestionResolved) {
+    alert("Use Extra Move before the question is resolved.");
+    return;
+  }
+  player.cards.extraMove--;
+  const btn = document.getElementById("extraMoveBtn");
+  if (btn) {
+    btn.style.display = player.cards.extraMove > 0 ? "inline-block" : "none";
+    btn.innerText = `👢 Use Extra Move (${player.cards.extraMove})`;
+  }
+  alert(`👢 ${player.name} used an Extra Move Card. Teacher: after this question is resolved, move the physical token one additional tile forward, following your board rules.`);
+  updateShop();
+}
+
 function updateHintButton(){
   const btn = document.getElementById("hintBtn");
   const player = players[currentPlayerIndex];
@@ -1366,7 +1389,8 @@ function savePlayers() {
         double: 0,
         skipTrap: 0,
         extraMove: 0
-      }
+      },
+      bossesDefeatedZones: []
     });
   }
 
@@ -1380,6 +1404,15 @@ function savePlayers() {
 }
 
 function startBoss(zone){
+  if (!players.length) {
+    alert("Please register players first.");
+    return;
+  }
+  const player = players[currentPlayerIndex];
+  if (player.bossesDefeatedZones && player.bossesDefeatedZones.includes(zone)) {
+    alert(`${player.name} has already defeated this Boss. Each Boss can reward a player only once.`);
+    return;
+  }
   document.getElementById("zoneSelect").value = zone;
   startQuestion("Boss");
 }
@@ -1399,12 +1432,25 @@ function useDoublePoints(){
   alert(`⭐ ${player.name} activated Double Points!`);
 }
 function startQuestion(tile){
-  const selectedZone = document.getElementById("zoneSelect").value;
+  if (!players.length) {
+    alert("Please register 2–4 players before starting the game.");
+    show("register");
+    return;
+  }
 
+  // Power-Ups apply only to the question on which they are activated.
+  doublePointsActive = false;
+  skipTrapActive = false;
+
+  const selectedZone = document.getElementById("zoneSelect").value;
   const zoneQuestions = questions.filter(q => q.zone === selectedZone);
 
-  const random =
-    zoneQuestions[Math.floor(Math.random() * zoneQuestions.length)];
+  if (!zoneQuestions.length) {
+    alert("No questions are available for this zone yet.");
+    return;
+  }
+
+  const random = zoneQuestions[Math.floor(Math.random() * zoneQuestions.length)];
 
   currentAnswer = random.answer;
   currentOptions = random.options;
@@ -1436,6 +1482,12 @@ function startQuestion(tile){
 updateHintButton();
 updateDoubleButton();
 updateSkipTrapButton();
+  const extraMoveButton = document.getElementById("extraMoveBtn");
+  if (extraMoveButton) {
+    const extraMoveCount = players[currentPlayerIndex].cards.extraMove;
+    extraMoveButton.style.display = extraMoveCount > 0 ? "inline-block" : "none";
+    extraMoveButton.innerText = `👢 Use Extra Move (${extraMoveCount})`;
+  }
   startTimer();
   show("questionPage");
 }
@@ -1518,6 +1570,11 @@ function checkAnswer(selected, tile, explain){
   bossesDefeated++;
 
   const selectedZone = document.getElementById("zoneSelect").value;
+  const bossPlayer = players[currentPlayerIndex];
+  if (!bossPlayer.bossesDefeatedZones) bossPlayer.bossesDefeatedZones = [];
+  if (!bossPlayer.bossesDefeatedZones.includes(selectedZone)) {
+    bossPlayer.bossesDefeatedZones.push(selectedZone);
+  }
   const crystalMessage = awardZoneCrystal(selectedZone);
 
   document.getElementById("feedbackText").innerText =
@@ -1525,8 +1582,8 @@ function checkAnswer(selected, tile, explain){
 }
 
   } else {
-    // Movement is tracked on the physical board by the teacher.
-    // Assumption: every incorrect answer causes the player to move back 2 spaces.
+    // The teacher manages the physical token. An incorrect answer means the
+    // player stays on the current tile; there is no backward movement penalty.
     let feedback = "❌ Incorrect answer!";
 
     if(tile === "Trap"){
@@ -1549,11 +1606,19 @@ function checkAnswer(selected, tile, explain){
     document.getElementById("feedbackText").innerText = feedback;
   }
 
+  // Do not allow a Power-Up to carry over to the next question.
+  doublePointsActive = false;
+  skipTrapActive = false;
+
   document.getElementById("explainText").innerText = explain;
 
   document.getElementById("totalScoreText").innerText =
     players[currentPlayerIndex].points;
 
+  updateShop();
+  updateHintButton();
+  updateDoubleButton();
+  updateSkipTrapButton();
   show("feedback");
 }
 
@@ -1601,6 +1666,8 @@ function resumeTimer(){
       clearInterval(timerInterval);
       if (currentQuestionResolved) return;
       currentQuestionResolved = true;
+      doublePointsActive = false;
+      skipTrapActive = false;
 
       document.querySelectorAll("#answerBox button").forEach(btn => btn.disabled = true);
 
@@ -1611,6 +1678,10 @@ function resumeTimer(){
       document.getElementById("totalScoreText").innerText =
         players[currentPlayerIndex].points;
 
+      updateShop();
+      updateHintButton();
+      updateDoubleButton();
+      updateSkipTrapButton();
       show("feedback");
     }
   }, 1000);
@@ -1643,10 +1714,18 @@ document.getElementById("winnerName").innerText =
   document.getElementById("resultScore").innerText =
     winner.points;
 
-  document.getElementById("resultCurrency").innerText = crystalCurrency;
-  document.getElementById("resultPower").innerText =
-  hintCards + doublePointCards + skipTrapCards;
-  document.getElementById("resultBoss").innerText = bossesDefeated;
+  const totalCrystals = players.reduce((sum, p) => {
+    const c = p.crystals || {};
+    return sum + (c.blue || 0) + (c.green || 0) + (c.orange || 0) + (c.purple || 0);
+  }, 0);
+  const totalPowerUps = players.reduce((sum, p) => {
+    const c = p.cards || {};
+    return sum + (c.hint || 0) + (c.double || 0) + (c.skipTrap || 0) + (c.extraMove || 0);
+  }, 0);
+  const totalBossesDefeated = players.reduce((sum, p) => sum + ((p.bossesDefeatedZones || []).length), 0);
+  document.getElementById("resultCurrency").innerText = totalCrystals;
+  document.getElementById("resultPower").innerText = totalPowerUps;
+  document.getElementById("resultBoss").innerText = totalBossesDefeated;
 
   show("result");
 }
