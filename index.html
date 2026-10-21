@@ -702,148 +702,415 @@ let skipTrapActive = false;
 let currentOptions = [];
 let currentQuestionResolved = false;
 const questions = [
+
+  // ==========================================
+  // FOREST OF NUMBERS (QUESTIONS 1–5)
+  // ==========================================
   {
-    zone:"Forest of Numbers",
-    q:"A farmer has 48 apples and wants to divide them equally into 6 baskets. How many apples will each basket contain?",
-    options:["6","7","8","9"],
-    answer:"8",
-    explain:"48 ÷ 6 = 8 apples in each basket."
+    zone: "Forest of Numbers",
+    q: "A farmer has 48 apples and wants to divide them equally into 6 baskets. How many apples will each basket contain?",
+    options: ["6", "7", "8", "9"],
+    answer: "8",
+    explain: "48 ÷ 6 = 8 apples in each basket."
   },
   {
-    zone:"Forest of Numbers",
-    q:"Ali solved 24 × 5 using repeated addition, while Sara used multiplication directly. Which method is more efficient and why?",
-    options:["Ali, because repeated addition is faster","Sara, because multiplication is faster","Both are wrong","No answer"],
-    answer:"Sara, because multiplication is faster",
-    explain:"Multiplication is more efficient than repeated addition for larger groups."
+    zone: "Forest of Numbers",
+    q: "Ali solved 24 × 5 using repeated addition, while Sara used multiplication directly. Which method is more efficient and why?",
+    options: [
+      "Ali, because repeated addition is faster",
+      "Sara, because multiplication is faster",
+      "Both are wrong",
+      "No answer"
+    ],
+    answer: "Sara, because multiplication is faster",
+    explain: "Multiplication is more efficient than repeated addition for larger groups."
   },
   {
-    zone:"Forest of Numbers",
-    q:"A bus carries 36 students. Another 14 students enter the bus, and 8 students leave. How many students are left?",
-    options:["40","42","44","50"],
-    answer:"42",
-    explain:"36 + 14 - 8 = 42 students."
+    zone: "Forest of Numbers",
+    q: "A bus carries 36 students. Another 14 students enter the bus, and 8 students leave. How many students are left?",
+    options: ["40", "42", "44", "50"],
+    answer: "42",
+    explain: "36 + 14 - 8 = 42 students."
   },
   {
-    zone:"Forest of Numbers",
-    q:"Arrange these numbers from largest to smallest: 0.9, 0.09, 0.99, 0.19.",
-    options:["0.99, 0.9, 0.19, 0.09","0.09, 0.19, 0.9, 0.99","0.9, 0.99, 0.19, 0.09","0.19, 0.09, 0.9, 0.99"],
-    answer:"0.99, 0.9, 0.19, 0.09",
-    explain:"Compare decimal place values carefully."
+    zone: "Forest of Numbers",
+    q: "Arrange these numbers from largest to smallest: 0.9, 0.09, 0.99, 0.19.",
+    options: [
+      "0.99, 0.9, 0.19, 0.09",
+      "0.09, 0.19, 0.9, 0.99",
+      "0.9, 0.99, 0.19, 0.09",
+      "0.19, 0.09, 0.9, 0.99"
+    ],
+    answer: "0.99, 0.9, 0.19, 0.09",
+    explain: "Compare decimal place values carefully."
   },
   {
-    zone:"Forest of Numbers",
-    q:"Why is 1,250 greater than 1,205 even though both numbers start with 1?",
-    options:["Because 250 is greater than 205","Because 1 is greater than 0","Because 205 is greater","They are equal"],
-    answer:"Because 250 is greater than 205",
-    explain:"Compare hundreds, tens, and ones after the thousands place."
+    zone: "Forest of Numbers",
+    q: "Why is 1,250 greater than 1,205 even though both numbers start with 1?",
+    options: [
+      "Because 250 is greater than 205",
+      "Because 1 is greater than 0",
+      "Because 205 is greater",
+      "They are equal"
+    ],
+    answer: "Because 250 is greater than 205",
+    explain: "Both numbers have 1 thousand. Compare the remaining hundreds, tens, and ones: 250 is greater than 205."
   },
 
+  // ==========================================
+  // FRACTION MOUNTAIN (QUESTIONS 6–10)
+  // ==========================================
   {
-    zone:"Fraction Mountain",
-    q:"Amir ate 3/8 of a pizza and Sara ate 2/8. What fraction of the pizza is left?",
-    options:["1/8","2/8","3/8","5/8"],
-    answer:"3/8",
-    explain:"8/8 - 3/8 - 2/8 = 3/8."
+    zone: "Fraction Mountain",
+    q: "Amir ate 3/8 of a pizza and Sara ate 2/8. What fraction of the pizza is left?",
+    options: ["1/8", "2/8", "3/8", "5/8"],
+    answer: "3/8",
+    explain: "8/8 - 3/8 - 2/8 = 3/8."
   },
   {
-    zone:"Fraction Mountain",
-    q:"Compare 5/6 and 7/9. Which is larger?",
-    options:["5/6","7/9","Same","Cannot compare"],
-    answer:"5/6",
-    explain:"5/6 = 15/18 and 7/9 = 14/18, so 5/6 is larger."
+    zone: "Fraction Mountain",
+    q: "Compare 5/6 and 7/9. Which is larger?",
+    options: ["5/6", "7/9", "Same", "Cannot compare"],
+    answer: "5/6",
+    explain: "5/6 = 15/18 and 7/9 = 14/18, so 5/6 is larger."
   },
   {
-    zone:"Fraction Mountain",
-    q:"A recipe needs 3/4 cup of sugar. Lina only has a 1/4 cup measuring tool. How many times must she use it?",
-    options:["2","3","4","5"],
-    answer:"3",
-    explain:"3/4 is made of three 1/4 cups."
+    zone: "Fraction Mountain",
+    q: "A recipe needs 3/4 cup of sugar. Lina only has a 1/4 cup measuring tool. How many times must she use it?",
+    options: ["2", "3", "4", "5"],
+    answer: "3",
+    explain: "Three 1/4-cup measures make 3/4 cup."
   },
   {
-    zone:"Fraction Mountain",
-    q:"Why is 0.5 equal to 1/2?",
-    options:["Both mean half","Both mean one whole","0.5 is bigger","1/2 is bigger"],
-    answer:"Both mean half",
-    explain:"0.5 and 1/2 represent the same value."
+    zone: "Fraction Mountain",
+    q: "Why is 0.5 equal to 1/2?",
+    options: [
+      "Both mean half",
+      "Both mean one whole",
+      "0.5 is bigger",
+      "1/2 is bigger"
+    ],
+    answer: "Both mean half",
+    explain: "0.5 and 1/2 represent the same value."
   },
   {
-    zone:"Fraction Mountain",
-    q:"A student completed 2/5 of homework on Monday and 1/2 on Tuesday. Did the student finish all homework?",
-    options:["Yes","No","Exactly complete","Not enough information"],
-    answer:"No",
-    explain:"2/5 + 1/2 = 4/10 + 5/10 = 9/10, so not complete."
-  },
-
-  {
-    zone:"Money Market",
-    q:"A shirt costs RM80. During a sale, the price is reduced by 25%. What is the new price?",
-    options:["RM20","RM40","RM60","RM100"],
-    answer:"RM60",
-    explain:"25% of RM80 is RM20. RM80 - RM20 = RM60."
-  },
-  {
-    zone:"Money Market",
-    q:"Siti has RM50. She buys a book for RM18.50 and a bag for RM22.90. How much money does she have left?",
-    options:["RM8.60","RM9.60","RM10.60","RM11.60"],
-    answer:"RM8.60",
-    explain:"RM50 - RM18.50 - RM22.90 = RM8.60."
-  },
-  {
-    zone:"Money Market",
-    q:"Which is better: 20% discount on RM100 or 10% discount on RM200?",
-    options:["20% on RM100","10% on RM200","Both are the same","No discount"],
-    answer:"Both are the same",
-    explain:"Both discounts save RM20."
-  },
-  {
-    zone:"Money Market",
-    q:"A shop sold 125 apples in the morning and 87 apples in the afternoon. If the shop originally had 300 apples, how many apples are left?",
-    options:["78","88","98","108"],
-    answer:"88",
-    explain:"300 - 125 - 87 = 88."
-  },
-  {
-    zone:"Money Market",
-    q:"A family spends RM45 on groceries every week. How much will they spend in 4 weeks?",
-    options:["RM160","RM180","RM200","RM220"],
-    answer:"RM180",
-    explain:"RM45 × 4 = RM180."
+    zone: "Fraction Mountain",
+    q: "A student completed 2/5 of homework on Monday and 1/2 on Tuesday. Did the student finish all the homework?",
+    options: [
+      "Yes",
+      "No",
+      "Exactly complete",
+      "Not enough information"
+    ],
+    answer: "No",
+    explain: "2/5 + 1/2 = 4/10 + 5/10 = 9/10, so 1/10 remains."
   },
 
+  // ==========================================
+  // MONEY MARKET (QUESTIONS 11–15)
+  // ==========================================
   {
-    zone:"HOTS Castle",
-    q:"A student says all squares are rectangles, but not all rectangles are squares. Do you agree?",
-    options:["Agree","Disagree","All rectangles are squares","Squares have 5 sides"],
-    answer:"Agree",
-    explain:"A square has all rectangle properties, but a rectangle does not need all sides equal."
+    zone: "Money Market",
+    q: "A shirt costs RM80. During a sale, the price is reduced by 25%. What is the new price?",
+    options: ["RM20", "RM40", "RM60", "RM100"],
+    answer: "RM60",
+    explain: "25% of RM80 is RM20. RM80 - RM20 = RM60."
   },
   {
-    zone:"HOTS Castle",
-    q:"Compare a square and a parallelogram. State one similarity and two differences.",
-    options:["Both are quadrilaterals","Both are circles","Both have 3 sides","Both are triangles"],
-    answer:"Both are quadrilaterals",
-    explain:"Both have 4 sides. A square has equal sides and right angles."
+    zone: "Money Market",
+    q: "Siti has RM50. She buys a book for RM18.50 and a bag for RM22.90. How much money does she have left?",
+    options: ["RM8.60", "RM9.60", "RM10.60", "RM11.60"],
+    answer: "RM8.60",
+    explain: "RM50 - RM18.50 - RM22.90 = RM8.60."
   },
   {
-    zone:"HOTS Castle",
-    q:"A triangle has two angles measuring 45° and 65°. What is the third angle?",
-    options:["60°","70°","80°","90°"],
-    answer:"70°",
-    explain:"180° - 45° - 65° = 70°."
+    zone: "Money Market",
+    q: "Which gives a greater saving: a 20% discount on RM100 or a 10% discount on RM200?",
+    options: [
+      "20% on RM100",
+      "10% on RM200",
+      "Both give the same saving",
+      "Neither gives a saving"
+    ],
+    answer: "Both give the same saving",
+    explain: "20% of RM100 = RM20, and 10% of RM200 = RM20."
   },
   {
-    zone:"HOTS Castle",
-    q:"Two students solved the same problem differently. Student A used a diagram while Student B used equations. Which method is better?",
-    options:["Diagram only","Equation only","Depends on the problem and explanation","Both wrong"],
-    answer:"Depends on the problem and explanation",
-    explain:"Different methods can be correct if the reasoning is clear."
+    zone: "Money Market",
+    q: "A shop sold 125 apples in the morning and 87 apples in the afternoon. If the shop originally had 300 apples, how many apples are left?",
+    options: ["78", "88", "98", "108"],
+    answer: "88",
+    explain: "300 - 125 - 87 = 88 apples."
   },
   {
-    zone:"HOTS Castle",
-    q:"During a board game challenge, a player earns 150 points, loses 45 points, and then earns another 90 points. What is the final score?",
-    options:["185","195","205","215"],
-    answer:"195",
-    explain:"150 - 45 + 90 = 195."
+    zone: "Money Market",
+    q: "A family spends RM45 on groceries every week. How much will they spend in 4 weeks?",
+    options: ["RM160", "RM180", "RM200", "RM220"],
+    answer: "RM180",
+    explain: "RM45 × 4 = RM180."
+  },
+
+  // ==========================================
+  // HOTS CASTLE (QUESTIONS 16–20)
+  // ORIGINAL QUESTIONS
+  // ==========================================
+  {
+    zone: "HOTS Castle",
+    q: "A student says all squares are rectangles, but not all rectangles are squares. Do you agree?",
+    options: [
+      "Agree",
+      "Disagree",
+      "All rectangles are squares",
+      "Squares have 5 sides"
+    ],
+    answer: "Agree",
+    explain: "A square has the properties of a rectangle, but a rectangle does not need all four sides to be equal."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "Compare a square and a parallelogram. Which statement is a valid similarity?",
+    options: [
+      "Both are quadrilaterals",
+      "Both are circles",
+      "Both have 3 sides",
+      "Both are triangles"
+    ],
+    answer: "Both are quadrilaterals",
+    explain: "Both shapes have four sides. A square has four equal sides and four right angles."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A triangle has angles of 45° and 65°. Adam says the third angle is 80°. Is Adam correct? Choose the correct answer and explanation.",
+    options: [
+      "Yes, because 45° + 65° = 100°",
+      "No, the third angle is 70° because 180° - 45° - 65° = 70°",
+      "No, the third angle is 90° because all triangles have a right angle",
+      "Yes, because the angles of a triangle add up to 360°"
+    ],
+    answer: "No, the third angle is 70° because 180° - 45° - 65° = 70°",
+    explain: "Adam is incorrect. The interior angles of a triangle add up to 180°. Therefore, 180° - 45° - 65° = 70°."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "Two students solved the same problem differently. Student A used a diagram while Student B used equations. Which method is better?",
+    options: [
+      "Diagram only",
+      "Equation only",
+      "Depends on the problem and explanation",
+      "Both are wrong"
+    ],
+    answer: "Depends on the problem and explanation",
+    explain: "Different methods can be correct if they suit the problem and the reasoning is clear."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "During a board game challenge, a player earns 150 points, loses 45 points, and then earns another 90 points. What is the final score?",
+    options: ["185", "195", "205", "215"],
+    answer: "195",
+    explain: "150 - 45 + 90 = 195 points."
+  },
+
+  // ==========================================
+  // HOTS CASTLE (QUESTIONS 21–40)
+  // ADDITIONAL QUESTIONS
+  // ==========================================
+  {
+    zone: "HOTS Castle",
+    q: "A rectangle has a length of 10 cm and a perimeter of 28 cm. What is its breadth?",
+    options: ["3 cm", "4 cm", "8 cm", "9 cm"],
+    answer: "4 cm",
+    explain: "28 ÷ 2 = 14 cm. Breadth = 14 - 10 = 4 cm."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A regular pentagon has a perimeter of 35 cm. What is the length of each side?",
+    options: ["5 cm", "6 cm", "7 cm", "8 cm"],
+    answer: "7 cm",
+    explain: "A regular pentagon has 5 equal sides. 35 ÷ 5 = 7 cm."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "Two gardens have the same perimeter of 24 m. Garden A measures 8 m × 4 m, while Garden B measures 7 m × 5 m. Which statement is correct?",
+    options: [
+      "Both gardens have the same area",
+      "Garden A has the larger area",
+      "Garden B has the larger area",
+      "Neither garden has an area"
+    ],
+    answer: "Garden B has the larger area",
+    explain: "Garden A: 8 × 4 = 32 m². Garden B: 7 × 5 = 35 m². Equal perimeters do not always mean equal areas."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A rectangular playground is 12 m long. Its width is 3 m less than its length. A pupil calculates its area as 12 + 9 = 21 m². What is the correct area?",
+    options: ["21 m²", "36 m²", "108 m²", "144 m²"],
+    answer: "108 m²",
+    explain: "Width = 12 - 3 = 9 m. Area = 12 × 9 = 108 m². The pupil added instead of multiplying."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A class needs a poster board with an area of at least 48 cm². Which options meet the requirement?",
+    options: [
+      "9 cm × 5 cm only",
+      "8 cm × 6 cm only",
+      "8 cm × 6 cm and 12 cm × 4 cm",
+      "9 cm × 5 cm and 12 cm × 3 cm"
+    ],
+    answer: "8 cm × 6 cm and 12 cm × 4 cm",
+    explain: "8 × 6 = 48 cm², 12 × 4 = 48 cm², and 9 × 5 = 45 cm². The two 48 cm² options meet the requirement."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A cube-shaped gift box has an edge length of 5 cm. Amir says its volume is 5 × 6 = 30 cm³ because a cube has six faces. What is the correct volume?",
+    options: ["25 cm³", "30 cm³", "100 cm³", "125 cm³"],
+    answer: "125 cm³",
+    explain: "Volume = length × width × height = 5 × 5 × 5 = 125 cm³. The number of faces is not used to calculate volume."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A rectangular box has a volume of 120 cm³, a length of 10 cm, and a width of 3 cm. A pupil says its height is 4 cm. Is the pupil correct?",
+    options: [
+      "Yes, because 10 × 3 × 4 = 120",
+      "No, the height is 3 cm",
+      "No, the height is 10 cm",
+      "No, the height is 40 cm"
+    ],
+    answer: "Yes, because 10 × 3 × 4 = 120",
+    explain: "Height = 120 ÷ (10 × 3) = 4 cm. The pupil's answer is correct."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A square and a rectangle both have a perimeter of 32 cm. The rectangle is 10 cm long. Which shape has the larger area?",
+    options: [
+      "The square, by 4 cm²",
+      "The rectangle, by 4 cm²",
+      "Both have the same area",
+      "The square, by 8 cm²"
+    ],
+    answer: "The square, by 4 cm²",
+    explain: "Square side = 32 ÷ 4 = 8 cm, so its area is 64 cm². Rectangle width = 16 - 10 = 6 cm, so its area is 60 cm². Difference = 4 cm²."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A teacher has 24 identical square tiles. Which pair of arrangements uses all 24 tiles to form two different rectangles?",
+    options: [
+      "3 rows of 8 and 4 rows of 6",
+      "3 rows of 7 and 4 rows of 5",
+      "5 rows of 5 and 2 rows of 10",
+      "3 rows of 6 and 4 rows of 7"
+    ],
+    answer: "3 rows of 8 and 4 rows of 6",
+    explain: "3 × 8 = 24 and 4 × 6 = 24. Both arrangements use all 24 tiles."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A pupil calculates 36 ÷ 4 by dividing 36 by 2 and then dividing the result by 2. Is this method valid?",
+    options: [
+      "Yes, because 36 ÷ 2 ÷ 2 = 9",
+      "No, because 36 must be multiplied by 4",
+      "No, because the answer must be 18",
+      "Yes, because 36 ÷ 2 = 18"
+    ],
+    answer: "Yes, because 36 ÷ 2 ÷ 2 = 9",
+    explain: "Dividing by 4 is equivalent to dividing by 2 twice: 36 ÷ 2 = 18, then 18 ÷ 2 = 9."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A number is between 300 and 400. Its tens digit is twice its ones digit, and the sum of its digits is 9. What is the number?",
+    options: ["324", "342", "362", "384"],
+    answer: "342",
+    explain: "The hundreds digit is 3. The tens and ones digits must total 6, with the tens digit twice the ones digit. They are 4 and 2, so the number is 342."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A teacher wants to divide 28 pupils into equal-sized teams without anyone left over. Which team size produces the fewest teams?",
+    options: ["2 pupils", "4 pupils", "7 pupils", "14 pupils"],
+    answer: "14 pupils",
+    explain: "28 ÷ 14 = 2 teams, which is fewer than the number of teams produced by the other choices."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A pupil says, 'If I double the length of a rectangle and keep its width the same, both its perimeter and area will double.' The original rectangle is 6 cm × 4 cm. Which statement is correct?",
+    options: [
+      "Both the perimeter and area double",
+      "Only the area doubles",
+      "Only the perimeter doubles",
+      "Neither the perimeter nor area changes"
+    ],
+    answer: "Only the area doubles",
+    explain: "Original perimeter = 20 cm and area = 24 cm². New dimensions are 12 cm × 4 cm, giving perimeter 32 cm and area 48 cm². The area doubles, but the perimeter does not."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "Which pair of rectangular boxes has the same volume of 24 cm³ but different dimensions?",
+    options: [
+      "1 cm × 2 cm × 12 cm and 2 cm × 3 cm × 4 cm",
+      "2 cm × 2 cm × 6 cm and 2 cm × 2 cm × 6 cm",
+      "1 cm × 3 cm × 8 cm and 1 cm × 3 cm × 8 cm",
+      "2 cm × 3 cm × 3 cm and 2 cm × 3 cm × 3 cm"
+    ],
+    answer: "1 cm × 2 cm × 12 cm and 2 cm × 3 cm × 4 cm",
+    explain: "Both boxes have a volume of 24 cm³, but their dimensions differ."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A triangle has angles of 45° and 65°. A pupil says the third angle is 80°. What is the correct conclusion?",
+    options: [
+      "The pupil is correct; the angle is 80°",
+      "The pupil is wrong; the angle is 70°",
+      "The pupil is wrong; the angle is 90°",
+      "The pupil is correct; triangle angles total 360°"
+    ],
+    answer: "The pupil is wrong; the angle is 70°",
+    explain: "180° - 45° - 65° = 70°. The interior angles of a triangle add up to 180°."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A pupil claims that every rectangle with a perimeter of 20 cm must have the same area. Which pair disproves the claim?",
+    options: [
+      "5 cm × 5 cm and 6 cm × 4 cm",
+      "4 cm × 6 cm and 6 cm × 4 cm",
+      "5 cm × 5 cm and 5 cm × 5 cm",
+      "2 cm × 8 cm and 8 cm × 2 cm"
+    ],
+    answer: "5 cm × 5 cm and 6 cm × 4 cm",
+    explain: "Both have a perimeter of 20 cm, but their areas are 25 cm² and 24 cm². This disproves the claim that equal perimeters always mean equal areas."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A pupil says 3/4 is smaller than 2/3 because 3 is smaller than 4. Which comparison is correct?",
+    options: [
+      "3/4 is greater than 2/3",
+      "2/3 is greater than 3/4",
+      "Both fractions are equal",
+      "The fractions cannot be compared"
+    ],
+    answer: "3/4 is greater than 2/3",
+    explain: "Using a common denominator, 3/4 = 9/12 and 2/3 = 8/12. Therefore, 3/4 is greater."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "A shop sells 3 notebooks for RM12. Mei says 5 notebooks will cost RM20 at the same rate. Is her reasoning correct?",
+    options: [
+      "Yes, because each notebook costs RM4",
+      "No, because 5 notebooks cost RM15",
+      "No, because each notebook costs RM5",
+      "Yes, because each notebook costs RM3"
+    ],
+    answer: "Yes, because each notebook costs RM4",
+    explain: "RM12 ÷ 3 = RM4 per notebook. Therefore, 5 × RM4 = RM20."
+  },
+  {
+    zone: "HOTS Castle",
+    q: "You have 24 square tiles and want to make a rectangle with whole-number side lengths. Which arrangement is closest to a square?",
+    options: [
+      "1 × 24 tiles",
+      "2 × 12 tiles",
+      "3 × 8 tiles",
+      "4 × 6 tiles"
+    ],
+    answer: "4 × 6 tiles",
+    explain: "All four arrangements have an area of 24 square tiles. The 4 × 6 arrangement has the most similar side lengths, making it closest to a square."
   }
 ];
 function updatePlayerDropdown(){
